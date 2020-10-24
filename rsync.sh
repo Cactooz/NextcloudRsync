@@ -40,6 +40,38 @@ SSHPORT=22
 USERNAMES=( admin user user2 )
 
 #--------------------------
+#END OF NORMAL CONFIG
+#--------------------------
+
+#===SPECIAL FILES/FOLDERS===
+
+#------description------
+#If you need any other files or folders to be synced,
+#that does not use the same path layout.
+#Then you can add them in the array bellow. (SPECIALJOBS)
+#Usage of special variables is possible,
+#but they should be defined before the array with special jobs.
+
+#------job layout-------
+#Special jobs layout:
+#"logname date logpath sourcepath targetpath weeklylogfilename targetip sshport"
+#Special jobs variables example:
+#"$NAME $DATE $LOGPATH $SOURCEPATH $TARGETPATH $LOGFILE $TARGETIP $SSHPORT"
+
+#---special variables---
+
+#BASESOURCEPATH="/var/www/nextcloud/"
+#SPECIALTARGETPATH="$TARGETPATH/special"
+
+
+SPECIALJOBS=(
+	"config $DATE $LOGPATH /var/www/nextcloud/config/config.php $TARGETPATH $LOGFILE $TARGETIP $SSHPORT"
+	"groupfolder $DATE $LOGPATH /media/usb/ncdata/__groupfolders/1 $TARGETPATH/groupfolder $LOGFILE $TARGETIP $SSHPORT"
+)
+
+#--------------------------
+#END OF ADVANCED CONFIG
+#--------------------------
 
 echo "--- $DAY, week $WEEK ---" | tee -a $LOGPATH/$LOGFILE
 
@@ -57,7 +89,16 @@ do
 	
 	#Start the Rsync job for the user
 	echo "$DATE - Starting Rsync job for $USERNAME" | tee -a $LOGPATH/$LOGFILE
-	./rsync-job.sh $USERNAME $DATE $LOGPATH $USERSOURCEPATH $USERTARGETPATH $LOGFILE $TARGETIP $SSHPORT
+	./rsync-user.sh $USERNAME $DATE $LOGPATH $USERSOURCEPATH $USERTARGETPATH $LOGFILE $TARGETIP $SSHPORT
+	echo "" | tee -a $LOGPATH/$LOGFILE
+done
+
+#Loop through all special jobs
+for JOB in "${SPECIALJOBS[@]}"
+do
+	#Start the special Rsync job
+	echo "$DATE - Starting special Rsync job" | tee -a $LOGPATH/$LOGFILE
+	./rsync-special.sh $JOB
 	echo "" | tee -a $LOGPATH/$LOGFILE
 done
 
