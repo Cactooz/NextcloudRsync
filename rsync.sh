@@ -89,7 +89,7 @@ do
 	
 	#Start the Rsync job for the user
 	echo "$DATE - Starting Rsync job for $USERNAME" | tee -a $LOGPATH/$LOGFILE
-	./rsync-user.sh $USERNAME $DATE $LOGPATH $USERSOURCEPATH $USERTARGETPATH $LOGFILE $TARGETIP $SSHPORT
+	./rsync-job.sh $USERNAME $DATE $LOGPATH $USERSOURCEPATH $USERTARGETPATH $LOGFILE $TARGETIP $SSHPORT
 	echo "" | tee -a $LOGPATH/$LOGFILE
 done
 
@@ -98,7 +98,7 @@ for JOB in "${SPECIALJOBS[@]}"
 do
 	#Start the special Rsync job
 	echo "$DATE - Starting special Rsync job" | tee -a $LOGPATH/$LOGFILE
-	./rsync-special.sh $JOB
+	./rsync-job.sh $JOB
 	echo "" | tee -a $LOGPATH/$LOGFILE
 done
 
