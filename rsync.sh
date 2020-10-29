@@ -1,25 +1,26 @@
 #!/bin/bash
 
-DATE=$(date +%Y-%m-%d-%H-%M)
-DAY=$(date +%A)
+DATE=$(date +%a-%d-%b-%H-%M)
 WEEK=$(date +%V)
+DAY=$(date +%A)
 
 #-------DESCRIPTION--------
 #Script to Rsync folders to a remote server folder.
 #Compabitble with multiple users as long as they use the same path layout.
 #Makes a simple weekly log and a more in depth log for each Rsync job.
 #sendmail.py needs to be configured with your own emails and email server.
-#weeklymail.sh needs to be configured with path to the weekly log
+#weeklymail.sh needs to be configured with path to the weekly log.
+#clearlogs.sh logfile name can be changed.
 
 #-----NEEDED SCRIPTS-------
-#rsync-user.sh to Rsync
+#rsync-job.sh to Rsync
 #sendmail.py to send an error email
 #clearlogs.sh to clear old .log files
 #weeklymail.sh to send a weekly mail with rsync statuses
 
 #---------CONFIG-----------
 #Name of the weekly logfile (default: "week-$WEEK-Rsync.log")
-LOGFILE="week-$WEEK-Rsync.log"
+LOGFILE="w$WEEK-Rsync.log"
 
 #Path to logfile (default: /var/log/rsync)
 LOGPATH=/var/log/rsync
@@ -63,7 +64,6 @@ USERNAMES=( admin user user2 )
 #BASESOURCEPATH="/var/www/nextcloud/"
 #SPECIALTARGETPATH="$TARGETPATH/special"
 
-
 SPECIALJOBS=(
 	"config $DATE $LOGPATH /var/www/nextcloud/config/config.php $TARGETPATH $LOGFILE $TARGETIP $SSHPORT"
 	"groupfolder $DATE $LOGPATH /media/usb/ncdata/__groupfolders/1 $TARGETPATH/groupfolder $LOGFILE $TARGETIP $SSHPORT"
@@ -73,11 +73,11 @@ SPECIALJOBS=(
 #END OF ADVANCED CONFIG
 #--------------------------
 
-echo "--- $DAY, week $WEEK ---" | tee -a $LOGPATH/$LOGFILE
+echo "--- $DAY, week $WEEK ---" >> $LOGPATH/$LOGFILE
 
 #Start Nextcloud maintenance mode
 echo "" | tee -a $LOGPATH/$LOGFILE
-sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --on | tee -a $LOGPATH/$LOGFILE
+sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --on 2>&1 | tee -a $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE
 
 #Loop through all users
@@ -88,7 +88,7 @@ do
 	USERTARGETPATH=$TARGETPATH/$USERNAME
 	
 	#Start the Rsync job for the user
-	echo "$DATE - Starting Rsync job for $USERNAME" | tee -a $LOGPATH/$LOGFILE
+	echo "$(date +%T) - Starting Rsync job for $USERNAME" | tee -a $LOGPATH/$LOGFILE
 	./rsync-job.sh $USERNAME $DATE $LOGPATH $USERSOURCEPATH $USERTARGETPATH $LOGFILE $TARGETIP $SSHPORT
 	echo "" | tee -a $LOGPATH/$LOGFILE
 done
@@ -97,20 +97,24 @@ done
 for JOB in "${SPECIALJOBS[@]}"
 do
 	#Start the special Rsync job
-	echo "$DATE - Starting special Rsync job" | tee -a $LOGPATH/$LOGFILE
+	echo "$(date +%T) - Starting special Rsync job" | tee -a $LOGPATH/$LOGFILE
 	./rsync-job.sh $JOB
 	echo "" | tee -a $LOGPATH/$LOGFILE
 done
 
 #Clear old logs
-echo "$DATE - Clearing old logfiles" | tee -a $LOGPATH/$LOGFILE
-./clearlogs.sh $LOGFILE $LOGPATH
-echo "$DATE - Clearing of old logfiles done" | tee -a $LOGPATH/$LOGFILE
+echo "$(date +%T) - Clearing old logfiles" | tee -a $LOGPATH/$LOGFILE
+./clearlogs.sh $DATE $WEEK $LOGFILE $LOGPATH
 echo "" | tee -a $LOGPATH/$LOGFILE
 
+
 #Stop Nextcloud maintenance mode
-sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off | tee -a $LOGPATH/$LOGFILE
+sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off 2>&1 | tee -a $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE
+
+#Finish message
+echo "--- Rsync done, $(date +%a-%d-%b) ---" >> $LOGPATH/$LOGFILE
+echo "" >> $LOGPATH/$LOGFILE
 
 echo "** For more information, see specific logfiles (logpath: $LOGPATH) **" | tee -a $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE

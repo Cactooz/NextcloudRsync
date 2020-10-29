@@ -1,13 +1,27 @@
 #!/bin/bash
 
-#Name of the user
-USERNAME=$1
+#-------DESCRIPTION--------
+#Executes a Rsync job for a folder/file.
+#If the job fails it sends
+
+#-----NEEDED SCRIPTS-------
+#sendmail.py to send an error email
+
+#-----COMMAND LAYOUT-------
+#./rsync-job.sh JOBNAME DATE LOGPATH SOURCEPATH TARGETPATH WEEKLOGFILE TARGETIP SSHPORT
+
+#---------CONFIG-----------
+#Name of the job
+JOBNAME=$1
 
 #Current date
 DATE=$2
 
 #Name of the logfile
-LOGFILE="$DATE-$USERNAME-Rsync.log"
+LOGFILE="$DATE-$JOBNAME-Rsync.log"
+
+#Name of the logfile that gets the live data
+LIVELOGFILE="$DATE-$JOBNAME-Rsync.livelog"
 
 #Path to logfile
 LOGPATH=$3
@@ -33,17 +47,24 @@ SSHPORT=$8
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
 #Run Rsync backup using ssh on port 5022
-sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH >> $LOGPATH/$LOGFILE
+sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH --log-file=$LOGPATH/$LOGFILE 2>&1 | tee -a $LOGPATH/$LIVELOGFILE
 
 #Test Rsync result
 if test $(echo $?) -eq 0
-	then
-		echo "** Success ** Returncode: $?" >> $LOGPATH/$LOGFILE
-		echo "$DATE - Rsync done successfully" | tee -a $LOGPATH/$WEEKLOGFILE
-	else
-		echo "** Fail ** Returncode: $?" >> $LOGPATH/$LOGFILE
-		echo "$DATE - Rsync failed" | tee -a $LOGPATH/$WEEKLOGFILE
-		python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" | tee -a $LOGPATH/$WEEKLOGFILE
-		echo "Sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
-		exit 1
+then
+	echo "*** Rsync Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
+	echo "$(date +%T) - Rsync for $JOBNAME done successfully" | tee -a $LOGPATH/$WEEKLOGFILE
+else
+	echo "*** Rsync Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
+	echo "$(date +%T) - Rsync for $JOBNAME failed" | tee -a $LOGPATH/$WEEKLOGFILE
+	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" 2>&1 | tee -a $LOGPATH/$LOGFILE
+	if [ "$?" -eq "0" ]
+		then
+			echo "*** Mail Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
+			echo "$(date +%T) - Sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
+		else
+			echo "*** Mail Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
+			echo "$(date +%T) - Could not sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
+	fi
+	exit 1
 fi
