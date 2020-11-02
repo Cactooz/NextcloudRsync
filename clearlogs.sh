@@ -4,7 +4,7 @@
 #Clearing logs that is 30 days or older.
 
 #-----COMMAND LAYOUT-------
-#./clearlogs.sh DATE WEEK WEEKLOGFILE LOGPATH
+#./clearlogs.sh DATE WEEK WEEKLOGFILE LOGPATH DAYS
 
 #---------CONFIG-----------
 #Current date
@@ -22,33 +22,44 @@ WEEKLOGFILE=$3
 #Path to logfile
 LOGPATH=$4
 
+#After how many days logfiles should be deleted
+DAYS=$5
+
 #--------------------------
 
 #Write Date to logfile
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
-# Remove logfiles older than 30 days
-find $LOGPATH -name "*.log" -type f -mtime +30 -delete 2>&1 | tee -a $LOGPATH/$LOGFILE
+#Getting amount of logfiles
+FOUNDLOGS=$(find $LOGPATH -name "*.log" -type f -mtime +$DAYS | wc -l)
+echo "$(date +%T) - Removing $FOUNDLOGS logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
+
+#Remove logfiles older than 30 days
+find $LOGPATH -name "*.log" -type f -mtime +$DAYS -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
 if [ "$?" -eq "0" ]
 	then
-		echo "*** Clearing logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
-		echo "$(date +%T) - Clearing of old logfiles done successfully." | tee -a $LOGPATH/$WEEKLOGFILE
+		echo "*** Removing logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
+		echo "$(date +%T) - Removed $FOUNDLOGS old logfiles successfully." | tee -a $LOGPATH/$WEEKLOGFILE
 	else
-		echo "*** Clearing logs Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
-		echo "$(date +%T) - Clearing of old logfiles failed. (Returncode: $?)" | tee -a $LOGPATH/$WEEKLOGFILE
+		echo "*** Removing logs Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
+		echo "$(date +%T) - Removal of old logfiles failed. (Returncode: $?)" | tee -a $LOGPATH/$WEEKLOGFILE
 fi
 
-echo "" >> $LOGPATH/$LOGFILE
+echo "" | tee -a $LOGPATH/$LOGFILE
+
+#Getting amount of temp-logfiles
+FOUNDLIVELOGS=$(find $LOGPATH -name "*.livelog" -type f | wc -l)
+echo "$(date +%T) - Removing $FOUNDLIVELOGS live-logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
 
 #Remove live logfiles
-find $LOGPATH -name "*.livelog" -type f -delete 2>&1 | tee -a $LOGPATH/$LOGFILE
+find $LOGPATH -name "*.livelog" -type f -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
 if [ "$?" -eq "0" ]
 	then
-		echo "*** Clearing live logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
-		echo "$(date +%T) - Clearing of live-logfiles done successfully." | tee -a $LOGPATH/$WEEKLOGFILE
+		echo "*** Removing live-logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
+		echo "$(date +%T) - Removed $FOUNDLIVELOGS live-logfiles successfully." | tee -a $LOGPATH/$WEEKLOGFILE
 	else
-		echo "*** Clearing live logs Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
-		echo "$(date +%T) - Clearing of live-logfiles failed. (Returncode: $?)" | tee -a $LOGPATH/$WEEKLOGFILE
+		echo "*** Removing live-logs Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
+		echo "$(date +%T) - Removal of live-logfiles failed. (Returncode: $?)" | tee -a $LOGPATH/$WEEKLOGFILE
 fi
 
 echo "" >> $LOGPATH/$LOGFILE

@@ -40,6 +40,9 @@ SSHPORT=22
 #The users that should Rsync
 USERNAMES=( admin user user2 )
 
+#After how many days logfiles should be deleted
+DAYS=30
+
 #--------------------------
 #END OF NORMAL CONFIG
 #--------------------------
@@ -82,7 +85,7 @@ then
 	echo "" | tee -a $LOGPATH/$LOGFILE
 fi
 
-echo "--- $DAY ---" >> $LOGPATH/$LOGFILE
+echo "--- Rsync start, $DAY $(date +%d %b) ---" >> $LOGPATH/$LOGFILE
 
 #Start Nextcloud maintenance mode
 echo "" | tee -a $LOGPATH/$LOGFILE
@@ -112,8 +115,7 @@ do
 done
 
 #Clear old logs
-echo "$(date +%T) - Clearing old logfiles" | tee -a $LOGPATH/$LOGFILE
-./clearlogs.sh $DATE $WEEK $LOGFILE $LOGPATH
+./clearlogs.sh $DATE $WEEK $LOGFILE $LOGPATH $DAYS
 echo "" | tee -a $LOGPATH/$LOGFILE
 
 #Stop Nextcloud maintenance mode
@@ -121,5 +123,5 @@ sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off 2>&1 | tee -a
 echo "" | tee -a $LOGPATH/$LOGFILE
 
 #Finish message
-echo "--- Rsync done, $(date +%a-%d-%b) ---" >> $LOGPATH/$LOGFILE
+echo "--- Rsync done, $(date +%a %d %b) ---" >> $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE
