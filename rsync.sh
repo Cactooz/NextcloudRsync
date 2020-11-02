@@ -77,7 +77,7 @@ SPECIALJOBS=(
 #--------------------------
 
 #Check if the logfile does not exist
-if test ! -f $LOGFILE
+if test ! -f $LOGPATH/$LOGFILE
 then
 	echo "=== Week $WEEK ===" > $LOGPATH/$LOGFILE
 	echo "" >> $LOGPATH/$LOGFILE
@@ -85,7 +85,7 @@ then
 	echo "" | tee -a $LOGPATH/$LOGFILE
 fi
 
-echo "--- Rsync start, $DAY $(date +%d %b) ---" >> $LOGPATH/$LOGFILE
+echo "--- Rsync start, $DAY $(date +"%d %b") ---" >> $LOGPATH/$LOGFILE
 
 #Start Nextcloud maintenance mode
 echo "" | tee -a $LOGPATH/$LOGFILE
@@ -123,5 +123,5 @@ sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off 2>&1 | tee -a
 echo "" | tee -a $LOGPATH/$LOGFILE
 
 #Finish message
-echo "--- Rsync done, $(date +%a %d %b) ---" >> $LOGPATH/$LOGFILE
+echo "--- Rsync done, $(date +"%a %d %b") ---" >> $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE
