@@ -30,6 +30,12 @@ port = '587'
 
 #--------------------------
 
+#Sending help command
+if sys.argv[1] == "-h":
+	print("DESCRIPTION\nSends a mail with a logfile to the specified email.\nNeeds to be set up with emails, server, username and password.")
+	print("\nCOMMAND LAYOUT\npython3 ./sendmail.py FILEPATH FILENAME MAILSUBJECT")
+	exit(0)
+
 #Path to logfile
 filepath = sys.argv[1]
 

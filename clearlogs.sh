@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #-------DESCRIPTION--------
-#Clearing logs that is 30 days or older.
+#Clearing logs that is X days or older.
 
 #-----COMMAND LAYOUT-------
 #./clearlogs.sh DATE WEEK WEEKLOGFILE LOGPATH DAYS
@@ -27,6 +27,18 @@ DAYS=$5
 
 #--------------------------
 
+#Sending help command
+if [ "$1" = "-h" ]
+then
+	echo "DESCRIPTION"
+	echo "Clearing logs that is X days or older."
+	echo ""
+	echo "COMMAND LAYOUT"
+	echo "./clearlogs.sh DATE WEEK WEEKLOGFILE LOGPATH DAYS"
+	
+	exit 0
+fi
+
 #Write Date to logfile
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
@@ -34,7 +46,7 @@ echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 FOUNDLOGS=$(find $LOGPATH -name "*.log" -type f -mtime +$DAYS | wc -l)
 echo "$(date +%T) - Removing $FOUNDLOGS logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
 
-#Remove logfiles older than 30 days
+#Remove logfiles older than X days
 find $LOGPATH -name "*.log" -type f -mtime +$DAYS -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
 if [ "$?" -eq "0" ]
 	then

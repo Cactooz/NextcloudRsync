@@ -2,7 +2,7 @@
 
 #-------DESCRIPTION--------
 #Executes a Rsync job for a folder/file.
-#If the job fails it sends
+#If the job fails it sends an error mail.
 
 #-----NEEDED SCRIPTS-------
 #sendmail.py to send an error email
@@ -43,6 +43,22 @@ SSHPORT=$8
 
 #--------------------------
 
+#Sending help command
+if [ "$1" = "-h" ]
+then
+	echo "DESCRIPTION"
+	echo "Executes a Rsync job for a folder/file."
+	echo "If the job fails it sends an error mail."
+	echo ""
+	echo "COMMAND LAYOUT"
+	echo "./rsync-job.sh JOBNAME DATE LOGPATH SOURCEPATH TARGETPATH WEEKLOGFILE TARGETIP SSHPORT"
+	echo ""
+	echo "NEEDED SCRIPTS"
+	echo "sendmail.py to send an error email"
+	
+	exit 0
+fi
+	
 #Write Date to logfile
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
@@ -50,7 +66,7 @@ echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH --log-file=$LOGPATH/$LOGFILE 2>&1 | tee -a $LOGPATH/$LIVELOGFILE
 
 #Test Rsync result
-if test $(echo $?) -eq 0
+if [ "$?" -eq "0" ]
 then
 	echo "*** Rsync Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME done successfully" | tee -a $LOGPATH/$WEEKLOGFILE

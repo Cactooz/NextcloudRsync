@@ -15,8 +15,8 @@ DAY=$(date +%A)
 #-----NEEDED SCRIPTS-------
 #rsync-job.sh to Rsync
 #sendmail.py to send an error email
-#clearlogs.sh to clear old .log files
-#weeklymail.sh to send a weekly mail with rsync statuses
+#clearlogs.sh to clear old .log and .livelog files
+#weeklymail.sh to send a weekly mail with Rsync statuses
 
 #---------CONFIG-----------
 #Name of the weekly logfile (default: "week-$WEEK-Rsync.log")
@@ -41,7 +41,7 @@ SSHPORT=22
 USERNAMES=( admin user user2 )
 
 #After how many days logfiles should be deleted
-DAYS=30
+DAYS=14
 
 #--------------------------
 #END OF NORMAL CONFIG
@@ -76,8 +76,28 @@ SPECIALJOBS=(
 #END OF ADVANCED CONFIG
 #--------------------------
 
+#Sending help command
+if [ "$1" = "-h" ]
+then
+	echo "DESCRIPTION"
+	echo "Script to Rsync folders to a remote server folder."
+	echo "Compabitble with multiple users as long as they use the same path layout."
+	echo "Makes a simple weekly log and a more in depth log for each Rsync job."
+	echo ""
+	echo "COMMAND LAYOUT"
+	echo "./rsync.sh"
+	echo ""
+	echo "NEEDED SCRIPTS"
+	echo "rsync-job.sh to Rsync"
+	echo "sendmail.py to send an error email"
+	echo "clearlogs.sh to clear old .log and .livelog files"
+	echo "weeklymail.sh to send a weekly mail with Rsync statuses"
+	
+	exit 0
+fi
+
 #Check if the logfile does not exist
-if test ! -f $LOGPATH/$LOGFILE
+if [ ! -f $LOGPATH/$LOGFILE ]
 then
 	echo "=== Week $WEEK ===" > $LOGPATH/$LOGFILE
 	echo "" >> $LOGPATH/$LOGFILE
@@ -124,4 +144,4 @@ echo "" | tee -a $LOGPATH/$LOGFILE
 
 #Finish message
 echo "--- Rsync done, $(date +"%a %d %b") ---" >> $LOGPATH/$LOGFILE
-echo "" | tee -a $LOGPATH/$LOGFILE
+echo "" >> $LOGPATH/$LOGFILE
