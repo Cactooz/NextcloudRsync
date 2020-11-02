@@ -73,7 +73,16 @@ SPECIALJOBS=(
 #END OF ADVANCED CONFIG
 #--------------------------
 
-echo "--- $DAY, week $WEEK ---" >> $LOGPATH/$LOGFILE
+#Check if the logfile does not exist
+if test ! -f $LOGFILE
+then
+	echo "=== Week $WEEK ===" > $LOGPATH/$LOGFILE
+	echo "" >> $LOGPATH/$LOGFILE
+	echo "** For more information, see specific logfiles (logpath: $LOGPATH) **" | tee -a $LOGPATH/$LOGFILE
+	echo "" | tee -a $LOGPATH/$LOGFILE
+fi
+
+echo "--- $DAY ---" >> $LOGPATH/$LOGFILE
 
 #Start Nextcloud maintenance mode
 echo "" | tee -a $LOGPATH/$LOGFILE
@@ -107,14 +116,10 @@ echo "$(date +%T) - Clearing old logfiles" | tee -a $LOGPATH/$LOGFILE
 ./clearlogs.sh $DATE $WEEK $LOGFILE $LOGPATH
 echo "" | tee -a $LOGPATH/$LOGFILE
 
-
 #Stop Nextcloud maintenance mode
 sudo -u www-data php /var/www/nextcloud/occ maintenance:mode --off 2>&1 | tee -a $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE
 
 #Finish message
 echo "--- Rsync done, $(date +%a-%d-%b) ---" >> $LOGPATH/$LOGFILE
-echo "" >> $LOGPATH/$LOGFILE
-
-echo "** For more information, see specific logfiles (logpath: $LOGPATH) **" | tee -a $LOGPATH/$LOGFILE
 echo "" | tee -a $LOGPATH/$LOGFILE
