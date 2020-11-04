@@ -19,16 +19,16 @@ DAY=$(date +%A)
 #weeklymail.sh to send a weekly mail with Rsync statuses
 
 #---------CONFIG-----------
-#Name of the weekly logfile (default: "week-$WEEK-Rsync.log")
+#Name of the weekly logfile (default: "week-$WEEK-Rsync.log") (recomended to leave untouched)
 LOGFILE="w$WEEK-Rsync.log"
 
-#Path to logfile (default: /var/log/rsync)
+#Path to logfile (default: /var/log/rsync) (recomended to leave untouched)
 LOGPATH=/var/log/rsync
 
-#Path to source folder to sync (username will be added last)
+#Path to source folder to sync (usernames from USERNAMES will be added last)
 SOURCEPATH=/media/usb/ncdata
 
-#Path to target folder to sync to (username will be added last)
+#Path to target folder to sync to (usernames from USERNAMES will be added last)
 TARGETPATH=/media/usb/backup
 
 #Target IP to sync to

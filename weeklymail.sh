@@ -10,13 +10,13 @@ WEEK=$(date +%V)
 #sendmail.py to send weekly mail
 
 #---------CONFIG-----------
-#Name of the weekly logfile (default: "week-$WEEK-Rsync.log")
+#Name of the weekly logfile (default: "week-$WEEK-Rsync.log") (recomended to leave untouched)
 WEEKLOGFILE="w$WEEK-Rsync.log"
 
-#Path to logfile (default: /var/log/rsync)
+#Path to logfile (default: /var/log/rsync) (recomended to leave untouched)
 LOGPATH=/var/log/rsync
 
-#Name of the logfile
+#Name of the logfile (recomended to leave untouched)
 LOGFILE="w$WEEK-mail-Rsync.log"
 
 #--------------------------

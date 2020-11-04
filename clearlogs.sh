@@ -7,22 +7,22 @@
 #./clearlogs.sh DATE WEEK WEEKLOGFILE LOGPATH DAYS
 
 #---------CONFIG-----------
-#Current date
+#Current date (recived from command arguments, recomended to leave untouched)
 DATE=$1
 
-#Current week
+#Current week (recived from command arguments, recomended to leave untouched)
 WEEK=$2
 
-#Name of the logfile
+#Name of the logfile (recomended to leave untouched)
 LOGFILE="w$WEEK-clearlogs-Rsync.log"
 
-#Name of the weekly logfile
+#Name of the weekly logfile (recived from command arguments, recomended to leave untouched)
 WEEKLOGFILE=$3
 
-#Path to logfile
+#Path to logfile (recived from command arguments, recomended to leave untouched)
 LOGPATH=$4
 
-#After how many days logfiles should be deleted
+#After how many days logfiles should be deleted (recived from command arguments, recomended to leave untouched)
 DAYS=$5
 
 #--------------------------
