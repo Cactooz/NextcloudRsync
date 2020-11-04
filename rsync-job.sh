@@ -71,6 +71,8 @@ then
 	echo "*** Rsync Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME done successfully" | tee -a $LOGPATH/$WEEKLOGFILE
 else
+	ERRORCODE=$?
+	
 	echo "*** Rsync Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME failed" | tee -a $LOGPATH/$WEEKLOGFILE
 	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" 2>&1 | tee -a $LOGPATH/$LOGFILE
@@ -79,8 +81,14 @@ else
 			echo "*** Mail Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 			echo "$(date +%T) - Sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
 		else
+			ERRORCODE=$?
+			
 			echo "*** Mail Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 			echo "$(date +%T) - Could not sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
+			
+			exit $ERRORCODE
 	fi
-	exit 1
+	exit $ERRORCODE
 fi
+
+exit 0

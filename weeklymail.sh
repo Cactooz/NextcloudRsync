@@ -46,10 +46,16 @@ if [ "$?" -eq "0" ]
 		echo "$(date +%T) - Sent mail with this weeks Rsync log" | tee -a $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Sent mail with this weeks Rsync log" >> $LOGPATH/$WEEKLOGFILE
 	else
+		ERRORCODE=$?
+		
 		echo "*** Mail Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Failed sending mail with this weeks Rsync log" | tee -a $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Failed sending mail with this weeks Rsync log" >> $LOGPATH/$WEEKLOGFILE
+		
+		exit $ERRORCODE
 fi
 
 echo "" >> $LOGPATH/$LOGFILE
 echo "" >> $LOGPATH/$WEEKLOGFILE
+
+exit 0

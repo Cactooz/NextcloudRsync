@@ -102,7 +102,9 @@ then
 	echo "=== Week $WEEK ===" > $LOGPATH/$LOGFILE
 	echo "" >> $LOGPATH/$LOGFILE
 	echo "** For more information, see specific logfiles (logpath: $LOGPATH) **" | tee -a $LOGPATH/$LOGFILE
-	echo "" | tee -a $LOGPATH/$LOGFILE
+	echo "" >> $LOGPATH/$LOGFILE
+else
+	echo "** For more information, see specific logfiles (logpath: $LOGPATH) **"
 fi
 
 echo "--- Rsync start, $DAY $(date +"%d %b") ---" >> $LOGPATH/$LOGFILE
@@ -145,3 +147,5 @@ echo "" | tee -a $LOGPATH/$LOGFILE
 #Finish message
 echo "--- Rsync done, $(date +"%a %d %b") ---" >> $LOGPATH/$LOGFILE
 echo "" >> $LOGPATH/$LOGFILE
+
+exit 0
