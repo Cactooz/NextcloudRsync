@@ -82,3 +82,12 @@ The following into your crontab jobs file:
 Configure the variables before saving.
 * `<USER>` - The Linux user that should execute the job
 * `<DIRECTORY>` - The directory that all the scripts are located inside
+
+## Coming features
+
+### Likley
+* Large backup size different check
+* Send mail for SSL mail servers
+
+### Possibly
+* Webhook integration
