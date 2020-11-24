@@ -1,0 +1,6 @@
+# Set the default behavior.
+* text=auto
+
+# Keep LF line endings for full Linux compatibility.
+*.sh text eol=lf
+*.py text eol=lf
