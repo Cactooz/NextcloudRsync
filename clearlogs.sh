@@ -47,7 +47,7 @@ FOUNDLOGS=$(find $LOGPATH -name "*.log" -type f -mtime +$DAYS | wc -l)
 echo "$(date +%T) - Removing $FOUNDLOGS logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
 
 #Remove logfiles older than X days
-find $LOGPATH -name "*.log" -type f -mtime +$DAYS -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
+find $LOGPATH -name "*.log" -type f -mtime +$DAYS -exec rm -v {} \; >> $LOGPATH/$LOGFILE 2>&1
 if [ "$?" -eq "0" ]
 	then
 		echo "*** Removing logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
@@ -68,7 +68,7 @@ FOUNDLIVELOGS=$(find $LOGPATH -name "*.livelog" -type f | wc -l)
 echo "$(date +%T) - Removing $FOUNDLIVELOGS live-logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
 
 #Remove live logfiles
-find $LOGPATH -name "*.livelog" -type f -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
+find $LOGPATH -name "*.livelog" -type f -exec rm -v {} \; >> $LOGPATH/$LOGFILE 2>&1
 if [ "$?" -eq "0" ]
 	then
 		echo "*** Removing live-logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE

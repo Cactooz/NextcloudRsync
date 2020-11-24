@@ -39,7 +39,7 @@ fi
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
 echo "$(date +%T) - Sending mail with this weeks Rsync log" | tee -a $LOGPATH/$LOGFILE
-python3 ./sendmail.py "$LOGPATH" "$WEEKLOGFILE" "Weekly Rsync" 2>&1 | tee -a $LOGPATH/$LOGFILE
+python3 ./sendmail.py "$LOGPATH" "$WEEKLOGFILE" "Weekly Rsync" >> $LOGPATH/$LOGFILE 2>&1
 if [ "$?" -eq "0" ]
 	then
 		echo "*** Mail Success *** Returncode: $?" >> $LOGPATH/$LOGFILE

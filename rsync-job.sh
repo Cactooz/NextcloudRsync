@@ -63,7 +63,7 @@ fi
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
 #Run Rsync backup using ssh on port 5022
-sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH --log-file=$LOGPATH/$LOGFILE 2>&1 | tee -a $LOGPATH/$LIVELOGFILE
+sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH --log-file=$LOGPATH/$LOGFILE >> $LOGPATH/$LIVELOGFILE 2>&1
 
 #Test Rsync result
 if [ "$?" -eq "0" ]
@@ -75,7 +75,7 @@ else
 	
 	echo "*** Rsync Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME failed" | tee -a $LOGPATH/$WEEKLOGFILE
-	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" 2>&1 | tee -a $LOGPATH/$LOGFILE
+	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" >> $LOGPATH/$LOGFILE 2>&1
 	if [ "$?" -eq "0" ]
 		then
 			echo "*** Mail Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
