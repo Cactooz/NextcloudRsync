@@ -47,14 +47,15 @@ FOUNDLOGS=$(find $LOGPATH -name "*.log" -type f -mtime +$DAYS | wc -l)
 echo "$(date +%T) - Removing $FOUNDLOGS logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
 
 #Remove logfiles older than X days
-find $LOGPATH -name "*.log" -type f -mtime +$DAYS -exec rm -v {} \; >> $LOGPATH/$LOGFILE 2>&1
-if [ "$?" -eq "0" ]
+find $LOGPATH -name "*.log" -type f -mtime +$DAYS -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
+
+ERRORCODE=${PIPESTATUS[0]}
+
+if [ "$ERRORCODE" -eq "0" ]
 	then
 		echo "*** Removing logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Removed $FOUNDLOGS old logfile(s) successfully." | tee -a $LOGPATH/$WEEKLOGFILE
-	else
-		ERRORCODE=$?
-		
+	else		
 		echo "*** Removing logs Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Removal of old logfile(s) failed. (Returncode: $?)" | tee -a $LOGPATH/$WEEKLOGFILE
 		
@@ -68,14 +69,15 @@ FOUNDLIVELOGS=$(find $LOGPATH -name "*.livelog" -type f | wc -l)
 echo "$(date +%T) - Removing $FOUNDLIVELOGS live-logfile(s)." | tee -a $LOGPATH/$WEEKLOGFILE
 
 #Remove live logfiles
-find $LOGPATH -name "*.livelog" -type f -exec rm -v {} \; >> $LOGPATH/$LOGFILE 2>&1
-if [ "$?" -eq "0" ]
+find $LOGPATH -name "*.livelog" -type f -exec rm -v {} \; 2>&1 | tee -a $LOGPATH/$LOGFILE
+
+ERRORCODE=${PIPESTATUS[0]}
+
+if [ "$ERRORCODE" -eq "0" ]
 	then
 		echo "*** Removing live-logs Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Removed $FOUNDLIVELOGS live-logfile(s) successfully." | tee -a $LOGPATH/$WEEKLOGFILE
 	else
-		ERRORCODE=$?
-		
 		echo "*** Removing live-logs Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 		echo "$(date +%T) - Removal of live-logfile(s) failed. (Returncode: $?)" | tee -a $LOGPATH/$WEEKLOGFILE
 		

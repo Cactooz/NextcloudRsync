@@ -63,30 +63,31 @@ fi
 echo "--- $DATE ---" >> $LOGPATH/$LOGFILE
 
 #Run Rsync backup using ssh on port 5022
-sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH --log-file=$LOGPATH/$LOGFILE >> $LOGPATH/$LIVELOGFILE 2>&1
+sudo rsync -avzhe "ssh -p $SSHPORT" --progress --del $SOURCEPATH root@$TARGETIP:$TARGETPATH --log-file=$LOGPATH/$LOGFILE 2>&1 | tee -a $LOGPATH/$LIVELOGFILE
+
+ERRORCODE=${PIPESTATUS[0]}
 
 #Test Rsync result
-if [ "$?" -eq "0" ]
+if [ "$ERRORCODE" -eq "0" ]
 then
 	echo "*** Rsync Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME done successfully" | tee -a $LOGPATH/$WEEKLOGFILE
-else
-	ERRORCODE=$?
-	
+else	
 	echo "*** Rsync Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME failed" | tee -a $LOGPATH/$WEEKLOGFILE
-	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" >> $LOGPATH/$LOGFILE 2>&1
-	if [ "$?" -eq "0" ]
+	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" 2>&1 | tee -a $LOGPATH/$LOGFILE
+
+	MAILERRORCODE=${PIPESTATUS[0]}
+
+	if [ "$MAILERRORCODE" -eq "0" ]
 		then
 			echo "*** Mail Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 			echo "$(date +%T) - Sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
 		else
-			ERRORCODE=$?
-			
 			echo "*** Mail Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 			echo "$(date +%T) - Could not sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
 			
-			exit $ERRORCODE
+			exit $MAILERRORCODE
 	fi
 	exit $ERRORCODE
 fi
