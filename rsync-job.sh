@@ -72,7 +72,7 @@ if [ "$ERRORCODE" -eq "0" ]
 then
 	echo "*** Rsync Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME done successfully" | tee -a $LOGPATH/$WEEKLOGFILE
-else	
+else
 	echo "*** Rsync Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
 	echo "$(date +%T) - Rsync for $JOBNAME failed" | tee -a $LOGPATH/$WEEKLOGFILE
 	python3 ./sendmail.py "$LOGPATH" "$LOGFILE" "Rsync fail" 2>&1 | tee -a $LOGPATH/$LOGFILE

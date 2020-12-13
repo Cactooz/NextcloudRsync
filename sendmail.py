@@ -66,8 +66,8 @@ message.append("========================\n\n")
 file = open(fullpath,'r')
 lines = file.readlines()
 for line in lines:
-    message.append(line)
-    file.close()
+	message.append(line)
+	file.close()
 
 #Add file end message
 message.append("\n========================\n")
