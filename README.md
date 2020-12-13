@@ -85,9 +85,12 @@ Configure the variables before saving.
 
 ## Coming features
 
+### Being worked on
+* Discord Webhook integration
+
 ### Likley
-* Large backup size different check
+* Large backup size difference check
 * Send mail for SSL mail servers
 
 ### Possibly
-* Webhook integration
+* Config file
