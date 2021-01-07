@@ -94,3 +94,4 @@ Configure the variables before saving.
 
 ### Possibly
 * Config file
+* Setup command for automatic setup
