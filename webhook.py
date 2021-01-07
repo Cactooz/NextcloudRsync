@@ -37,7 +37,8 @@ description = "Log file: {}".format(filename)
 #Color of the webhook, red = 16711680 green = 65280
 color = sys.argv[4]
 
-log = "blah blah blah"
+#Empty log information
+#log = ""
 
 #Footer text for the embed
 footer = "Log location: {}".format(filepath)
@@ -47,6 +48,14 @@ attachment = "{}/{}".format(filepath, filename)
 
 #Setup Discord webhook link
 discord = Discord(url=webhookurl)
+
+#Read log file and add to the embed
+file = open(attachment,'r')
+lines = file.readlines()
+for line in lines:
+	log += "{}\n".format(line)
+	file.close()
+
 
 #Send Discord embed post
 discord.post(
