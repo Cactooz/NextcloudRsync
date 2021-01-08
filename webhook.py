@@ -53,7 +53,7 @@ discord = Discord(url=webhookurl)
 file = open(attachment,'r')
 lines = file.readlines()
 for line in lines:
-	log += "{}\n".format(line)
+	log += "{}".format(line)
 	file.close()
 
 #Send Discord embed post
