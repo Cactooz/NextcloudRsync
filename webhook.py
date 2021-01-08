@@ -12,7 +12,7 @@ from discordwebhook import Discord
 
 #---------CONFIG-----------
 #Webhook url
-webhookurl = "https://discordapp.com/api/webhooks/<discord-webhook-url>"
+webhookurl = "https://discord.com/api/webhooks/<discord-webhook-url>"
 
 #--------------------------
 
@@ -37,8 +37,8 @@ description = "Log file: {}".format(filename)
 #Color of the webhook, red = 16711680 green = 65280
 color = sys.argv[4]
 
-#Empty log information
-#log = ""
+#Empty log string
+log = ""
 
 #Footer text for the embed
 footer = "Log location: {}".format(filepath)
@@ -56,7 +56,6 @@ for line in lines:
 	log += "{}\n".format(line)
 	file.close()
 
-
 #Send Discord embed post
 discord.post(
 	embeds=[
@@ -66,11 +65,15 @@ discord.post(
 			"timestamp": str(datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()),
 			"color": color,
 			"fields": [
-				{"name": "Log File", "value": log, "inline": False},
+				{
+					"name": "Log File",
+					"value": log,
+					"inline": False
+				}
 			],
 			"footer": {
-				"text": footer,
-			},
+				"text": footer
+			}
 		}
 	],
 	file={"file": open(attachment, "rb"),
