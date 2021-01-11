@@ -85,10 +85,26 @@ else
 			echo "$(date +%T) - Sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
 		else
 			echo "*** Mail Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
-			echo "$(date +%T) - Could not sent mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
+			echo "$(date +%T) - Could not send mail with error log" | tee -a $LOGPATH/$WEEKLOGFILE
 			
 			exit $MAILERRORCODE
 	fi
+
+	python3 ./webhook.py $LOGPATH $LOGFILE "Rsync Error" 16711680
+
+	WEBHOOKERRORCODE=${PIPESTATUS[0]}
+
+	if [ "$WEBHOOKERRORCODE" -eq "0" ]
+		then
+			echo "*** Webhook Success *** Returncode: $?" >> $LOGPATH/$LOGFILE
+			echo "$(date +%T) - Sent webhook with error log" | tee -a $LOGPATH/$WEEKLOGFILE
+		else
+			echo "*** Webhook Fail *** Returncode: $?" >> $LOGPATH/$LOGFILE
+			echo "$(date +%T) - Could not send webhook with error log" | tee -a $LOGPATH/$WEEKLOGFILE
+			
+			exit $WEBHOOKERRORCODE
+	fi
+
 	exit $ERRORCODE
 fi
 
