@@ -4,60 +4,51 @@ import datetime
 from discordwebhook import Discord
 
 #-------DESCRIPTION--------
-#Sends a embed to a Discord webhook with the logfile attached.
-#Needs to be set up with a Discord webhook url.
+#Sends a webhook request with a logfile to the specified webhook url.
 
 #-----COMMAND LAYOUT-------
-#python3 ./webhook.py FILEPATH FILENAME TITLE COLOR
-
-#---------CONFIG-----------
-#Webhook url
-webhookurl = "https://discord.com/api/webhooks/<discord-webhook-url>"
+#python3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT
 
 #--------------------------
 
 #Sending help command
 if sys.argv[1] == "-h":
-	print("DESCRIPTION\nSends a embed to a Discord webhook with the logfile attached.\nNeeds to be set up with a Discord webhook url.")
-	print("\nCOMMAND LAYOUT\npython3 ./webhook.py FILEPATH FILENAME TITLE COLOR")
+	print("DESCRIPTION\nSends a webhook request with a logfile to the specified webhook url.")
+	print("\nCOMMAND LAYOUT\npython3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT")
 	exit(0)
 
+#Webhook url
+webhookurl = sys.argv[1]
+
 #Path to logfile
-filepath = sys.argv[1]
+logurl = sys.argv[2]
 
 #Name of the logfile
-filename = sys.argv[2]
+logfile = sys.argv[3]
 
-#Title for the embed
-title = sys.argv[3]
+#Color for the webhook
+#red = 1671168
+#green = 65280
+color = sys.argv[4] 
 
-#Description of the embed with log file
-description = "Log file: {}".format(filename)
+#Title of the webhook
+title = sys.argv[5]
 
-#Color of the webhook, red = 16711680 green = 65280
-color = sys.argv[4]
+#Description of the webhook
+description = sys.argv[6]
 
-#Empty log string
-log = ""
+#Message that allows mentiones outside of the webhook
+message = sys.argv[7]
 
-#Footer text for the embed
-footer = "Log location: {}".format(filepath)
-
-#Attachment to send along the embed
-attachment = "{}/{}".format(filepath, filename)
+#Link the logfile to the attachment
+attachment = logfile
 
 #Setup Discord webhook link
 discord = Discord(url=webhookurl)
 
-#Read log file and add to the embed
-file = open(attachment,'r')
-lines = file.readlines()
-for line in lines:
-	log += "{}".format(line)
-	file.close()
-
-#Send Discord embed post
+#Send the JSON to the webhook and a message
 discord.post(
+	content = message,
 	embeds=[
 		{
 			"title": title,
@@ -65,17 +56,12 @@ discord.post(
 			"timestamp": str(datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()),
 			"color": color,
 			"fields": [
-				{
-					"name": "Log File",
-					"value": log,
-					"inline": False
-				}
+				{"name": "Log Location", "value": logurl, "inline": True},
+				{"name": "Log File", "value": logfile, "inline": True},
 			],
-			"footer": {
-				"text": footer
-			}
 		}
 	],
+	#Attach the logfile
 	file={"file": open(attachment, "rb"),
 	},
 )
