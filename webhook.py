@@ -62,6 +62,8 @@ if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 		if totallength <= 1500:
 			if line != "\n":
 				description += "{}\n".format(line)
+	if totallength >= 1500:
+		description += "**AND MORE...**"
 else:
 	#Description of the webhook
 	description = sys.argv[7+i]
