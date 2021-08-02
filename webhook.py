@@ -57,7 +57,8 @@ if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 	file = open(attachment,'r')
 	lines = file.readlines()
 	for line in lines:
-		log += "{}\n".format(line)
+		if line != "\n":
+			log += "{}\n".format(line)
 		file.close()
 
 	discord.post(
