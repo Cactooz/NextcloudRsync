@@ -55,10 +55,10 @@ if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 	description = "**Logfile:**\n"
 	file = open(logfile,'r')
 	lines = file.readlines()
+	file.close()
 	for line in lines:
 		if line != "\n":
 			description += "{}\n".format(line)
-		file.close()
 else:
 	#Description of the webhook
 	description = sys.argv[7+i]
