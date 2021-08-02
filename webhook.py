@@ -17,28 +17,33 @@ if sys.argv[1] == "-h":
 	print("\nCOMMAND LAYOUT\npython3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT")
 	exit(0)
 
+if sys.argv[1] == "-a" or sys.argv[1] == "-aw" or sys.argv[1] == "-w":
+	i = 1
+else:
+	i = 0
+
 #Webhook url
-webhookurl = sys.argv[1]
+webhookurl = sys.argv[1+i]
 
 #Path to logfile
-logurl = sys.argv[2]
+logurl = sys.argv[2+i]
 
 #Name of the logfile
-logfile = sys.argv[3]
+logfile = sys.argv[3+i]
 
 #Color for the webhook
 #red = 1671168
 #green = 65280
-color = sys.argv[4] 
+color = sys.argv[4+i] 
 
 #Title of the webhook
-title = sys.argv[5]
+title = sys.argv[5+i]
 
 #Description of the webhook
-description = sys.argv[6]
+description = sys.argv[6+i]
 
 #Message that allows mentiones outside of the webhook
-message = sys.argv[7]
+message = sys.argv[7+i]
 
 #Link the logfile to the attachment
 attachment = logfile
