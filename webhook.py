@@ -53,45 +53,29 @@ discord = Discord(url=webhookurl)
 
 #Send the JSON to the webhook and a message
 if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
-	log = ""
+	description = ""
 	file = open(attachment,'r')
 	lines = file.readlines()
 	for line in lines:
 		if line != "\n":
-			log += "{}\n".format(line)
+			description += "{}\n".format(line)
 		file.close()
 
-	discord.post(
-		content = message,
-		embeds=[
-			{
-				"title": title,
-				"description": log,
-				"timestamp": str(datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()),
-				"color": color,
-				"fields": [
-					{"name": "Log Location", "value": logurl, "inline": True},
-					{"name": "Log File", "value": logfile, "inline": True},
-				],
-			}
-		],
-	)
-else:	
-	discord.post(
-		content = message,
-		embeds=[
-			{
-				"title": title,
-				"description": description,
-				"timestamp": str(datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()),
-				"color": color,
-				"fields": [
-					{"name": "Log Location", "value": logurl, "inline": True},
-					{"name": "Log File", "value": logfile, "inline": True},
-				],
-			}
-		],
-	)
+discord.post(
+	content = message,
+	embeds=[
+		{
+			"title": title,
+			"description": description,
+			"timestamp": str(datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()),
+			"color": color,
+			"fields": [
+				{"name": "Log Location", "value": logurl, "inline": True},
+				{"name": "Log File", "value": logfile, "inline": True},
+			],
+		}
+	],
+)
 
 if sys.argv[1] == "-a" or sys.argv[1] == "-aw":
 	discord.post(
