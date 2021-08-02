@@ -66,7 +66,10 @@ discord.post(
 			],
 		}
 	],
-	#Attach the logfile
-	file={"file": open(attachment, "rb"),
-	},
 )
+
+if sys.argv[1] == "-a" or sys.argv[1] == "-aw":
+	discord.post(
+		#Attach the logfile
+		file={"file": open(attachment, "rb"),},
+	)
