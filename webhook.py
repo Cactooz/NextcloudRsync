@@ -47,9 +47,6 @@ message = sys.argv[5+i]
 #Title of the webhook
 title = sys.argv[6+i]
 
-#Description of the webhook
-description = sys.argv[7+i]
-
 #Setup Discord webhook link
 discord = Discord(url=webhookurl)
 
@@ -62,6 +59,9 @@ if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 		if line != "\n":
 			description += "{}\n".format(line)
 		file.close()
+else:
+	#Description of the webhook
+	description = sys.argv[7+i]
 
 discord.post(
 	content = message,
