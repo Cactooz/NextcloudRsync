@@ -5,9 +5,12 @@ from discordwebhook import Discord
 
 #-------DESCRIPTION--------
 #Sends a webhook request with a logfile to the specified webhook url.
+#The first command layout just sends an embed notifying that something ended successfully or failed.
+#The second command layout can attach or write the logfile to the message/embed.
 
 #-----COMMAND LAYOUT-------
 #python3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT
+#python3 ./webhook.py -ARGUMENT WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT
 
 #--------------------------
 
