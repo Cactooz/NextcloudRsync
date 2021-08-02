@@ -41,14 +41,14 @@ logfile = sys.argv[3+i]
 #green = 65280
 color = sys.argv[4+i] 
 
+#Message that allows mentiones outside of the webhook
+message = sys.argv[5+i]
+
 #Title of the webhook
-title = sys.argv[5+i]
+title = sys.argv[6+i]
 
 #Description of the webhook
-description = sys.argv[6+i]
-
-#Message that allows mentiones outside of the webhook
-message = sys.argv[7+i]
+description = sys.argv[7+i]
 
 #Setup Discord webhook link
 discord = Discord(url=webhookurl)
