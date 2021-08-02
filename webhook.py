@@ -53,7 +53,7 @@ discord = Discord(url=webhookurl)
 
 #Send the JSON to the webhook and a message
 if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
-	description = ""
+	description = "**Logfile:**\n"
 	file = open(attachment,'r')
 	lines = file.readlines()
 	for line in lines:
