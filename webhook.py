@@ -15,6 +15,8 @@ from discordwebhook import Discord
 if sys.argv[1] == "-h":
 	print("DESCRIPTION\nSends a webhook request with a logfile to the specified webhook url.")
 	print("\nCOMMAND LAYOUT\npython3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT")
+	print("\nALTERNATIVE COMMAND LAYOUT\npython3 ./webhook.py -ARGUMENT WEBHOOKURL FILEPATH FILENAME COLOR TITLE DESCRIPTION MESSAGECONTENT")
+	print("\nARGUMENTS\n-a: send the file as an attachment.\n-w: write the logfile into the embed description. NOTE that this overrides the description.\n-aw: -a and -w combined. Both attach and write the logfile.\n-h: Print this help text.")
 	exit(0)
 
 if sys.argv[1] == "-a" or sys.argv[1] == "-aw" or sys.argv[1] == "-w":
