@@ -53,16 +53,17 @@ discord = Discord(url=webhookurl)
 #Send the JSON to the webhook and a message
 if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 	totallength = 0
+	maxlength = 1500
 	description = "**Logfile:**\n"
 	file = open(logfile,'r')
 	lines = file.readlines()
 	file.close()
 	for line in lines:
-		totallength += len(line)
-		if totallength <= 1500:
+		if totallength <= maxlength:
+			totallength += len(line)
 			if line != "\n":
 				description += "{}\n".format(line)
-	if totallength >= 1500:
+	if totallength > maxlength:
 		description += "**AND MORE...**\n*This logfile doesn't end here. It was truncated to save space and stay below the 4000 character limit.*"
 else:
 	#Description of the webhook
