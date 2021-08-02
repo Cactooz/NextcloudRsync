@@ -22,6 +22,7 @@ if sys.argv[1] == "-h":
 	print("\nARGUMENTS\n-a: send the file as an attachment.\n-w: write the logfile into the embed description. NOTE that this overrides the description.\n-aw: -a and -w combined. Both attach and write the logfile.\n-h: Print this help text.")
 	exit(0)
 
+#Add an command argument offset if a attach or write argument is used.
 if sys.argv[1] == "-a" or sys.argv[1] == "-aw" or sys.argv[1] == "-w":
 	i = 1
 else:
@@ -53,11 +54,13 @@ discord = Discord(url=webhookurl)
 #Send the JSON to the webhook and a message
 if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 	totallength = 0
+	#The max character length of the logfile that gets added
 	maxlength = 1500
 	description = "**Logfile:**\n"
 	file = open(logfile,'r')
 	lines = file.readlines()
 	file.close()
+	#Read all lines and add them to the description
 	for line in lines:
 		if totallength <= maxlength:
 			totallength += len(line)
@@ -69,6 +72,7 @@ else:
 	#Description of the webhook
 	description = sys.argv[7+i]
 
+#Post the Discord message with embed
 discord.post(
 	content = message,
 	embeds=[
@@ -85,8 +89,8 @@ discord.post(
 	],
 )
 
+#Attach the logfile if the argument is used
 if sys.argv[1] == "-a" or sys.argv[1] == "-aw":
 	discord.post(
-		#Attach the logfile
 		file={"file": open(logfile, "rb"),},
 	)
