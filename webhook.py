@@ -5,20 +5,20 @@ from discordwebhook import Discord
 
 #-------DESCRIPTION--------
 #Sends a webhook request with a logfile to the specified webhook url.
-#The first command layout just sends an embed notifying that something ended successfully or failed.
-#The second command layout can attach or write the logfile to the message/embed.
+#The first command layout can attach or write the logfile to the message/embed.
+#The second command layout just sends an embed notifying that something ended successfully or failed.
 
 #-----COMMAND LAYOUT-------
-#python3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION 
 #python3 ./webhook.py -ARGUMENT WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION 
+#python3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION
 
 #--------------------------
 
 #Sending help command
 if sys.argv[1] == "-h":
-	print("DESCRIPTION\nSends a webhook request with a logfile to the specified webhook url.\nThe first command layout just sends an embed notifying that something ended successfully or failed.\nThe second command layout can attach or write the logfile to the message/embed.")
-	print("\nCOMMAND LAYOUT\npython3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION")
-	print("\nALTERNATIVE COMMAND LAYOUT\npython3 ./webhook.py -ARGUMENT WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION")
+	print("DESCRIPTION\nSends a webhook request with a logfile to the specified webhook url.\nThe first command layout can attach or write the logfile to the message/embed..\nThe second command layout just sends an embed notifying that something ended successfully or failed")
+	print("\nCOMMAND LAYOUT\npython3 ./webhook.py -ARGUMENT WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION")
+	print("\nBASIC COMMAND LAYOUT\npython3 ./webhook.py WEBHOOKURL FILEPATH FILENAME COLOR MESSAGECONTENT TITLE DESCRIPTION")
 	print("\nARGUMENTS\n-a: send the file as an attachment.\n-w: write the logfile into the embed description. NOTE that this overrides the description.\n-aw: -a and -w combined. Both attach and write the logfile.\n-h: Print this help text.")
 	exit(0)
 
