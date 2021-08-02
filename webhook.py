@@ -45,16 +45,13 @@ description = sys.argv[6+i]
 #Message that allows mentiones outside of the webhook
 message = sys.argv[7+i]
 
-#Link the logfile to the attachment
-attachment = logfile
-
 #Setup Discord webhook link
 discord = Discord(url=webhookurl)
 
 #Send the JSON to the webhook and a message
 if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 	description = "**Logfile:**\n"
-	file = open(attachment,'r')
+	file = open(logfile,'r')
 	lines = file.readlines()
 	for line in lines:
 		if line != "\n":
@@ -80,5 +77,5 @@ discord.post(
 if sys.argv[1] == "-a" or sys.argv[1] == "-aw":
 	discord.post(
 		#Attach the logfile
-		file={"file": open(attachment, "rb"),},
+		file={"file": open(logfile, "rb"),},
 	)
