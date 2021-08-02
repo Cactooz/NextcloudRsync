@@ -63,7 +63,7 @@ if sys.argv[1] == "-w" or sys.argv[1] == "-aw":
 			if line != "\n":
 				description += "{}\n".format(line)
 	if totallength >= 1500:
-		description += "**AND MORE...**\n*This logfile was truncated to save space and stay below the 4000 character limit*"
+		description += "**AND MORE...**\n*This logfile doesn't end here. It was truncated to save space and stay below the 4000 character limit*"
 else:
 	#Description of the webhook
 	description = sys.argv[7+i]
