@@ -35,7 +35,7 @@ webhookurl = sys.argv[1+i]
 logurl = sys.argv[2+i]
 
 #Name of the logfile
-logfile = sys.argv[3+i]
+logname = sys.argv[3+i]
 
 #Color for the webhook
 #red = 1671168
@@ -47,6 +47,9 @@ message = sys.argv[5+i]
 
 #Title of the webhook
 title = sys.argv[6+i]
+
+#Combine the logfile with the logurl
+logfile = logurl+logname
 
 #Setup Discord webhook link
 discord = Discord(url=webhookurl)
